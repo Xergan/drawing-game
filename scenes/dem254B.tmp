@@ -1,0 +1,79 @@
+[gd_scene load_steps=16 format=3 uid="uid://dar5pidpoc50"]
+
+[ext_resource type="Script" path="res://scripts/drawing.gd" id="1_yw5op"]
+[ext_resource type="PackedScene" uid="uid://lgbmdykgy7fj" path="res://scenes/player.tscn" id="2_1ayei"]
+[ext_resource type="PackedScene" uid="uid://blnu8qcomieci" path="res://scenes/ui.tscn" id="3_0388x"]
+[ext_resource type="Script" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="4_dnu2c"]
+[ext_resource type="PackedScene" uid="uid://cpgtkxr5h724d" path="res://scenes/obstacles/jump_pad.tscn" id="4_nsnul"]
+[ext_resource type="Script" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_2d.gd" id="4_pcqxc"]
+[ext_resource type="Script" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="5_bnyvy"]
+[ext_resource type="PackedScene" uid="uid://bdlqdcwfrfjd4" path="res://scenes/obstacles/kill_zone.tscn" id="5_f0qhw"]
+[ext_resource type="Script" path="res://scripts/ParallaxBackground.gd" id="9_a2ml0"]
+[ext_resource type="Texture2D" uid="uid://c2pqj02rmkma0" path="res://assets/player/test.png" id="10_la1ea"]
+
+[sub_resource type="Gradient" id="Gradient_l1r8f"]
+colors = PackedColorArray(0.0627451, 0.0627451, 0.0627451, 1, 0.0627451, 0.0627451, 0.0627451, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_6u2u6"]
+gradient = SubResource("Gradient_l1r8f")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_o2ffh"]
+size = Vector2(512, 100)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_nghlu"]
+
+[sub_resource type="Resource" id="Resource_fr3e3"]
+script = ExtResource("5_bnyvy")
+duration = 1.0
+transition = 0
+ease = 2
+
+[node name="Demo" type="Node2D" node_paths=PackedStringArray("ui")]
+script = ExtResource("1_yw5op")
+ui = NodePath("UI")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2(256, 670)
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="StaticBody2D"]
+scale = Vector2(2, 100)
+texture = SubResource("GradientTexture1D_6u2u6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("RectangleShape2D_o2ffh")
+
+[node name="player" parent="." instance=ExtResource("2_1ayei")]
+position = Vector2(182, 464)
+
+[node name="UI" parent="." instance=ExtResource("3_0388x")]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(510, 384)
+
+[node name="PhantomCameraHost" type="Node" parent="Camera2D"]
+script = ExtResource("4_dnu2c")
+
+[node name="JumpPad" parent="." instance=ExtResource("4_nsnul")]
+position = Vector2(627, 560)
+force = -1000.0
+
+[node name="KillZone" parent="." instance=ExtResource("5_f0qhw")]
+position = Vector2(513, 648)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KillZone"]
+shape = SubResource("WorldBoundaryShape2D_nghlu")
+
+[node name="PhantomCamera2D" type="Node2D" parent="."]
+position = Vector2(510, 384)
+script = ExtResource("4_pcqxc")
+tween_resource = SubResource("Resource_fr3e3")
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+script = ExtResource("9_a2ml0")
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
+texture = ExtResource("10_la1ea")

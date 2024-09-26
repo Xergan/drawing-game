@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://b5sibchf62qww"]
+
+[ext_resource type="Script" path="res://scripts/drawing.gd" id="1_4mrco"]
+
+[node name="Drawing" type="Node2D"]
+script = ExtResource("1_4mrco")
+segment = 2.0
